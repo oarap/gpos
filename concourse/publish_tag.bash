@@ -5,10 +5,11 @@ set -o pipefail
 set -u -e -x
 
 main() {
-  env LC_ALL=C tar tf bin_gpos_centos5_release/bin_gpos_centos5_release.tar.gz | grep "libgpos.so." | sort -n | head -n 1 | sed 's/\.\/lib\/libgpos\.so\./v/' > gpos_github_release_stage/tag.txt
-  cp -v bin_gpos_centos5_release/bin_gpos_centos5_release.tar.gz gpos_github_release_stage/bin_gpos_centos5_release.tar.gz
-  cp -v bin_gpos_centos5_debug/bin_gpos_centos5_debug.tar.gz gpos_github_release_stage/bin_gpos_centos5_debug.tar.gz
-  env GIT_DIR=gpos_src/.git git rev-parse HEAD > gpos_github_release_stage/commit.txt
+  local INPUT_DIR=bin_gpos_release
+  local OUTPUT_DIR=gpos_github_release_stage
+  env LC_ALL=C tar tf $INPUT_DIR/*.tar.gz | grep "libgpos.so." | sort -n | head -n 1 | sed 's/\.\/lib\/libgpos\.so\./v/' > $OUTPUT_DIR/tag.txt
+  cp -v $INPUT_DIR/*.tar.gz $OUTPUT_DIR/
+  env GIT_DIR=gpos_src/.git git rev-parse HEAD > $OUTPUT_DIR/commit.txt
 }
 
 main "$@"
